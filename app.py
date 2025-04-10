@@ -1,9 +1,9 @@
+from datetime import datetime
+from flask import Flask, render_template, request, redirect, flash
 import csv
 import io
 import json
 import logging
-
-from flask import Flask, render_template, request, redirect, flash
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = 'your-super-secret-key-123'  # Set a secure secret key for session management
 
+# Store flashcard sets in memory (in a real app, this would be a database)
+flashcard_sets = {}
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -41,11 +43,29 @@ def index():
                     if len(row) >= 2:
                         append_and_log(flashcards, row)
 
+            # Store the flashcard set with timestamp as ID
+            set_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+            flashcard_sets[set_id] = {
+                'name': file.filename,
+                'cards': flashcards,
+                'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'card_count': len(flashcards)
+            }
+            
             # Immediately render the flashcard page with the first flashcard visible
             logger.info(f"Rendering flashcards page with {len(flashcards)} flashcards")
             return render_template('flashcards.html', flashcards=json.dumps(flashcards))
-    return render_template('index.html')
+    
+    # For GET requests, show the upload form and list of saved sets
+    return render_template('index.html', flashcard_sets=flashcard_sets)
 
+@app.route('/set/<set_id>')
+def view_set(set_id):
+    if set_id in flashcard_sets:
+        flashcards = flashcard_sets[set_id]['cards']
+        return render_template('flashcards.html', flashcards=json.dumps(flashcards))
+    flash('Flashcard set not found')
+    return redirect('/')
 
 def append_and_log(flashcards, row):
     flashcards.append({'question': row[0], 'answer': row[1]})
@@ -53,4 +73,4 @@ def append_and_log(flashcards, row):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5003)

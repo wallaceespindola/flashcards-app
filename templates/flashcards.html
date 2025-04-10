@@ -73,6 +73,15 @@
     </div>
     <div class="mt-3">
         <button class="btn btn-secondary" id="flipBtn">Flip Card</button>
+        <a href="/" class="btn btn-outline-secondary ml-2">Back to Sets</a>
+    </div>
+    <!-- Add congratulations message and buttons (initially hidden) -->
+    <div id="congratsMessage" class="mt-4" style="display: none;">
+        <h3 class="text-success">Congratulations, you have finished the cards! 🎉</h3>
+        <div class="mt-3">
+            <button class="btn btn-primary mr-2" id="restartBtn">Start Over</button>
+            <a href="/" class="btn btn-success">Back to Sets</a>
+        </div>
     </div>
 </div>
 
@@ -86,6 +95,7 @@
     const cardFrontEl = document.getElementById('cardFront');
     const cardBackEl = document.getElementById('cardBack');
     const cardCounterEl = document.getElementById('cardCounter');
+    const congratsMessageEl = document.getElementById('congratsMessage');
 
     // Function to update the displayed flashcard and counter
     function updateCard() {
@@ -101,6 +111,13 @@
         cardCounterEl.textContent = (currentCardIndex + 1) + " / " + flashcards.length;
         // Make sure the flashcard is showing the front side
         flashcardEl.classList.remove('flipped');
+        
+        // Show/hide congratulations message
+        if (currentCardIndex === flashcards.length - 1) {
+            congratsMessageEl.style.display = 'block';
+        } else {
+            congratsMessageEl.style.display = 'none';
+        }
     }
 
     // Navigation: previous card
@@ -117,6 +134,13 @@
             currentCardIndex++;
             updateCard();
         }
+    });
+
+    // Restart button functionality
+    document.getElementById('restartBtn').addEventListener('click', function () {
+        currentCardIndex = 0;
+        congratsMessageEl.style.display = 'none';
+        updateCard();
     });
 
     // Flip the card on button click or card click
