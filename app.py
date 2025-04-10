@@ -36,7 +36,9 @@ def index():
             # Read and parse the CSV file
             stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
             logger.info(f"Reading CSV file: {file.filename}")
-            csv_input = csv.reader(stream)
+            # Use a maximum field size that can handle long answers
+            csv.field_size_limit(100000)
+            csv_input = csv.reader(stream, delimiter=';', skipinitialspace=True)  # Simple semicolon delimiter
             flashcards = []
             # Check if the first row is a header
             header = next(csv_input)
@@ -87,8 +89,11 @@ def delete_set(set_id):
     return redirect('/')
 
 def append_and_log(flashcards, row):
-    flashcards.append({'question': row[0], 'answer': row[1]})
-    logger.info(f'Flashcard added - question: {row[0]} -> answer: {row[1]}')
+    # Take the full answer text as is, regardless of commas
+    question = row[0].strip()
+    answer = row[1].strip()
+    flashcards.append({'question': question, 'answer': answer})
+    logger.info(f'Flashcard added - question: {question} -> answer: {answer}')
 
 
 if __name__ == '__main__':

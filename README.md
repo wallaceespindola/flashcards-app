@@ -60,12 +60,12 @@ Open your browser at http://localhost:5000 to start using the flashcards app.
 
 ## CSV Format
 
-Your CSV files should follow this format:
+Your CSV files should follow this format (file delimiter is ;):
 ```csv
-question,answer
-What is the capital of France?,Paris
-What is the capital of Brazil?,Brasília
-What is 2+2?,4
+question;answer
+What is the capital of France?;Paris
+What is the capital of Brazil?;Brasília
+What is 2+2?;4
 ```
 
 You can also include a header row with "Question" and "Answer" (case insensitive).
