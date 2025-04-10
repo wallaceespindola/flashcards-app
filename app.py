@@ -14,6 +14,14 @@ app.secret_key = 'your-super-secret-key-123'  # Set a secure secret key for sess
 # Store flashcard sets in memory (in a real app, this would be a database)
 flashcard_sets = {}
 
+def format_title(filename):
+    # Remove file extension
+    title = filename.rsplit('.', 1)[0]
+    # Replace dashes and underscores with spaces
+    title = title.replace('-', ' ').replace('_', ' ')
+    # Convert to title case
+    return title.title()
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -45,8 +53,10 @@ def index():
 
             # Store the flashcard set with timestamp as ID
             set_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+            formatted_title = format_title(file.filename)
             flashcard_sets[set_id] = {
-                'name': file.filename,
+                'name': formatted_title,
+                'filename': file.filename,
                 'cards': flashcards,
                 'created_at': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 'card_count': len(flashcards)
@@ -54,7 +64,7 @@ def index():
             
             # Immediately render the flashcard page with the first flashcard visible
             logger.info(f"Rendering flashcards page with {len(flashcards)} flashcards")
-            return render_template('flashcards.html', flashcards=json.dumps(flashcards))
+            return render_template('flashcards.html', flashcards=json.dumps(flashcards), title=formatted_title)
     
     # For GET requests, show the upload form and list of saved sets
     return render_template('index.html', flashcard_sets=flashcard_sets)
@@ -63,8 +73,17 @@ def index():
 def view_set(set_id):
     if set_id in flashcard_sets:
         flashcards = flashcard_sets[set_id]['cards']
-        return render_template('flashcards.html', flashcards=json.dumps(flashcards))
+        return render_template('flashcards.html', flashcards=json.dumps(flashcards), title=flashcard_sets[set_id]['name'])
     flash('Flashcard set not found')
+    return redirect('/')
+
+@app.route('/delete/<set_id>', methods=['POST'])
+def delete_set(set_id):
+    if set_id in flashcard_sets:
+        del flashcard_sets[set_id]
+        flash('Flashcard set deleted successfully')
+    else:
+        flash('Flashcard set not found')
     return redirect('/')
 
 def append_and_log(flashcards, row):
@@ -73,4 +92,4 @@ def append_and_log(flashcards, row):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5003)
+    app.run(debug=True, port=5000)

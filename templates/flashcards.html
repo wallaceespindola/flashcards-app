@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Flashcards Study</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
     <!-- Bootstrap CSS for styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
@@ -39,28 +40,51 @@
             justify-content: center;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background-color: #fff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             font-size: 1.2em;
             padding: 10px;
             text-align: center;
-            color: #000; /* Ensure text is visible */
+            color: #000;
+            transition: background-color 0.6s;
+        }
+
+        .flashcard .front {
+            background-color: #b8e2ff; /* Darker light blue */
         }
 
         .flashcard .back {
             transform: rotateY(180deg);
+            background-color: #c1e7c8; /* Darker light green */
         }
 
         .nav-btn {
-            font-size: 2em;
+            font-size: 3em; /* Bigger arrows */
             cursor: pointer;
             user-select: none;
+            padding: 20px; /* Bigger touch target */
+            margin: -20px; /* Compensate for padding */
+            color: #007bff;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .nav-btn:hover {
+            color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-btn {
+                font-size: 4em; /* Even bigger on mobile */
+                padding: 25px; /* Bigger touch target on mobile */
+                margin: -25px;
+            }
         }
     </style>
 </head>
 <body>
 <div class="container text-center">
-    <div class="d-flex justify-content-between mt-3">
+    <h2 class="mt-4 mb-4">{{ title }}</h2>
+    <div class="d-flex justify-content-between align-items-center">
         <div class="nav-btn" id="prevBtn">&#8592;</div>
         <div id="cardCounter"></div>
         <div class="nav-btn" id="nextBtn">&#8594;</div>
@@ -86,9 +110,9 @@
 </div>
 
 <script>
-    // Check that flashcards data is properly loaded
-    console.log("Flashcards data:", {{ flashcards | safe }});
+    // Initialize flashcards data
     const flashcards = {{ flashcards | safe }};
+    console.log("Flashcards data:", flashcards);
     let currentCardIndex = 0;
 
     const flashcardEl = document.getElementById('flashcard');
@@ -96,6 +120,9 @@
     const cardBackEl = document.getElementById('cardBack');
     const cardCounterEl = document.getElementById('cardCounter');
     const congratsMessageEl = document.getElementById('congratsMessage');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const flipBtn = document.getElementById('flipBtn');
 
     // Function to update the displayed flashcard and counter
     function updateCard() {
@@ -108,11 +135,9 @@
         const card = flashcards[currentCardIndex];
         cardFrontEl.textContent = card.question;
         cardBackEl.textContent = card.answer;
-        cardCounterEl.textContent = (currentCardIndex + 1) + " / " + flashcards.length;
-        // Make sure the flashcard is showing the front side
-        flashcardEl.classList.remove('flipped');
+        cardCounterEl.textContent = `Card ${currentCardIndex + 1} of ${flashcards.length}`;
         
-        // Show/hide congratulations message
+        // Show congrats message on the last card
         if (currentCardIndex === flashcards.length - 1) {
             congratsMessageEl.style.display = 'block';
         } else {
@@ -120,38 +145,67 @@
         }
     }
 
-    // Navigation: previous card
-    document.getElementById('prevBtn').addEventListener('click', function () {
-        if (currentCardIndex > 0) {
-            currentCardIndex--;
-            updateCard();
-        }
-    });
+    // Function to flip the card
+    function flipCard() {
+        flashcardEl.classList.toggle('flipped');
+    }
 
-    // Navigation: next card
-    document.getElementById('nextBtn').addEventListener('click', function () {
-        if (currentCardIndex < flashcards.length - 1) {
-            currentCardIndex++;
-            updateCard();
-        }
-    });
-
-    // Restart button functionality
-    document.getElementById('restartBtn').addEventListener('click', function () {
-        currentCardIndex = 0;
-        congratsMessageEl.style.display = 'none';
+    // Function to go to the next card
+    function nextCard() {
+        if (!flashcards || flashcards.length === 0) return;
+        
+        currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+        flashcardEl.classList.remove('flipped');
         updateCard();
+    }
+
+    // Function to go to the previous card
+    function previousCard() {
+        if (!flashcards || flashcards.length === 0) return;
+        
+        currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+        flashcardEl.classList.remove('flipped');
+        updateCard();
+    }
+
+    // Add keyboard event listeners
+    document.addEventListener('keydown', (event) => {
+        // Prevent default behavior for arrow keys to avoid page scrolling
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+            event.preventDefault();
+        }
+
+        switch (event.key) {
+            case 'ArrowUp':
+            case 'ArrowDown':
+                flipCard();
+                break;
+            case 'ArrowLeft':
+                previousCard();
+                break;
+            case 'ArrowRight':
+                nextCard();
+                break;
+        }
     });
 
-    // Flip the card on button click or card click
-    document.getElementById('flipBtn').addEventListener('click', function () {
-        flashcardEl.classList.toggle('flipped');
-    });
-    flashcardEl.addEventListener('click', function () {
-        flashcardEl.classList.toggle('flipped');
-    });
+    // Add click event listeners
+    flashcardEl.addEventListener('click', flipCard);
+    flipBtn.addEventListener('click', flipCard);
+    prevBtn.addEventListener('click', previousCard);
+    nextBtn.addEventListener('click', nextCard);
 
-    // Initialize with the first flashcard
+    // Add restart button functionality
+    const restartBtn = document.getElementById('restartBtn');
+    if (restartBtn) {
+        restartBtn.addEventListener('click', () => {
+            currentCardIndex = 0;
+            flashcardEl.classList.remove('flipped');
+            updateCard();
+        });
+    }
+
+    // Initialize the first card
     updateCard();
 </script>
 </body>
