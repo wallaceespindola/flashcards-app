@@ -63,8 +63,9 @@ Open your browser at http://localhost:5000 to start using the flashcards app.
 Your CSV files should follow this format:
 ```csv
 question,answer
-"What is the capital of France?","Paris"
-"What is 2+2?","4"
+What is the capital of France?,Paris
+What is the capital of Brazil?,Brasília
+What is 2+2?,4
 ```
 
 You can also include a header row with "Question" and "Answer" (case insensitive).
@@ -80,7 +81,7 @@ The study cards:
 ![The study cards](/resources/img-study-cards.png)
 
 You finished cards:
-![You finished cards](/resources/img-study-cards-finished.png)
+![You finished cards](/resources/img-cards-finished.png)
 
 ## Author Information
 
