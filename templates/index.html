@@ -1,127 +1,246 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Your Flashcards CSV</title>
     <!-- Bootstrap for styling -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px 15px;
         }
 
         .upload-container {
             max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
+            margin: 20px auto;
+            padding: 25px 20px;
             background-color: #fff;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        @media (max-width: 576px) {
+            .upload-container {
+                margin: 10px auto;
+                padding: 20px 15px;
+            }
+        }
+
+        .upload-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 576px) {
+            .upload-section {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+        }
+
         .saved-sets {
-            margin-top: 40px;
+            margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #dee2e6;
         }
 
         .set-card {
-            background: #f8f9fa;
+            background: #fff;
             border: 1px solid #dee2e6;
-            border-radius: 6px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 15px;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
 
         .set-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        @media (max-width: 576px) {
+            .set-card {
+                padding: 15px;
+            }
+
+            .set-card .btn {
+                margin: 5px;
+                min-width: 100px;
+            }
+
+            .set-card .d-flex {
+                flex-direction: column;
+            }
+
+            .set-card .btn-group {
+                margin-top: 10px;
+            }
+        }
+
+        .form-control-file {
+            padding: 10px 0;
+        }
+
+        .alert {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            color: #34495e;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (max-width: 576px) {
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h4 {
+                font-size: 1.2rem;
+            }
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .social-links {
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: #6c757d;
+            transition: color 0.3s;
+            margin: 0 10px;
+        }
+
+        .social-links a:hover {
+            color: #007bff;
+        }
+
+        .file-input-wrapper {
+            margin-bottom: 15px;
+        }
+
+        .stats {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+        }
     </style>
 </head>
 <body>
-<div class="upload-container">
-    <h2 class="mb-4 text-center">Flashcards Study App</h2>
-    
-    <!-- Upload Form -->
-    <div class="upload-section">
-        <h4>Upload New Flashcards</h4>
-        <form method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="csv_file">Choose CSV File</label>
-                <input type="file" class="form-control-file" id="csv_file" name="csv_file" accept=".csv">
-            </div>
-            <button type="submit" class="btn btn-primary">Load Flashcards</button>
-        </form>
-    </div>
+<div class="main-content">
+    <div class="upload-container">
+        <h2 class="mb-4 text-center">Flashcards Study App</h2>
+        
+        <!-- Upload Form -->
+        <div class="upload-section">
+            <h4>Upload New Flashcards</h4>
+            <form method="POST" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <label for="csv_file">Choose CSV File</label>
+                    <input type="file" class="form-control-file" id="csv_file" name="csv_file" accept=".csv">
+                    <small class="form-text text-muted">Upload a CSV file with questions and answers</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Load Flashcards</button>
+            </form>
+        </div>
 
-    <!-- Flash Messages -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div class="mt-3">
-        {% for message in messages %}
-        <div class="alert alert-warning">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="mt-3">
+            {% for message in messages %}
+            <div class="alert alert-warning">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
 
-    <!-- Saved Sets -->
-    <div class="saved-sets">
-        <h4>Your Flashcard Sets</h4>
-        {% if flashcard_sets %}
-            {% for set_id, set_info in flashcard_sets.items() %}
-            <div class="set-card">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="mb-1">{{ set_info.name }}</h5>
-                        <small class="text-muted">Created: {{ set_info.created_at }}</small>
-                        <p class="mb-0">Cards: {{ set_info.card_count }}</p>
-                    </div>
-                    <div>
-                        <a href="{{ url_for('view_set', set_id=set_id) }}" class="btn btn-outline-primary mr-2">Study Now</a>
-                        <button onclick="confirmDelete('{{ set_id }}')" class="btn btn-outline-danger">Delete</button>
+        <!-- Saved Sets -->
+        <div class="saved-sets">
+            <h4>Your Flashcard Sets</h4>
+            {% if flashcard_sets %}
+                {% for set_id, set_info in flashcard_sets.items() %}
+                <div class="set-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="mb-2">{{ set_info.name }}</h5>
+                            <div class="stats">
+                                <div>Created: {{ set_info.created_at }}</div>
+                                <div>Cards: {{ set_info.card_count }}</div>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <a href="{{ url_for('view_set', set_id=set_id) }}" class="btn btn-outline-primary">Study Now</a>
+                            <button onclick="confirmDelete('{{ set_id }}')" class="btn btn-outline-danger">Delete</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-muted">No flashcard sets uploaded yet. Upload your first set above!</p>
-        {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>No flashcard sets uploaded yet.</p>
+                    <p>Upload your first set using the form above!</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 </div>
 
-<!-- Footer with social links -->
-<footer class="text-center mt-5 pb-4">
+<footer class="text-center">
     <div class="container">
-        <p class="text-muted">Created by Wallace Espindola &copy; 2025</p>
+        <p class="text-muted mb-2">Created by Wallace Espindola &copy; 2025</p>
         <div class="social-links">
-            <a href="https://github.com/wallaceespindola" target="_blank" class="mx-2" title="GitHub">
+            <a href="https://github.com/wallaceespindola" target="_blank" title="GitHub">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
                 </svg>
             </a>
-            <a href="https://linkedin.com/in/wallaceespindola" target="_blank" class="mx-2" title="LinkedIn">
+            <a href="https://linkedin.com/in/wallaceespindola" target="_blank" title="LinkedIn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
                     <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
                 </svg>
             </a>
-            <a href="https://twitter.com/wsespindola" target="_blank" class="mx-2" title="Twitter">
+            <a href="https://twitter.com/wsespindola" target="_blank" title="Twitter">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-twitter" viewBox="0 0 16 16">
                     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
                 </svg>
             </a>
         </div>
     </div>
-    <style>
-        .social-links a {
-            color: #6c757d;
-            transition: color 0.3s;
-        }
-        .social-links a:hover {
-            color: #007bff;
-        }
-    </style>
 </footer>
 
 <!-- Add JavaScript for delete confirmation -->
