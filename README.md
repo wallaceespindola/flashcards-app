@@ -32,18 +32,21 @@ This project is a Flask-based web application that demonstrates:
 ## Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/wallaceespindola/flashcards-app.git
 cd flashcards-app
 ```
 
 2. Create a virtual environment:
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 3. Install dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -60,7 +63,8 @@ Open your browser at http://localhost:5000 to start using the flashcards app.
 
 ## CSV Format
 
-Your CSV files should follow this format (file delimiter is ;):
+Your CSV textual files should follow this format (question/answer delimiter is ;):
+
 ```csv
 question;answer
 What is the capital of France?;Paris
@@ -72,15 +76,33 @@ You can also include a header row with "Question" and "Answer" (case insensitive
 
 The name of the uploaded file will be used as the name of the flashcard set.
 
+CSV example with questions about Belgium:
+
+```csv
+question;answer
+What is the capital of Belgium?;Brussels
+What are the three official languages of Belgium?;Dutch, French, and German
+Which famous statue is a symbol of Brussels?;Manneken Pis
+Which organization has its headquarters in Brussels?;European Union
+What is Belgium famous for in cuisine?;Chocolate, waffles, and beer
+Which two main regions make up Belgium?;Flanders and Wallonia
+What is Belgium's national day?;July 21
+```
+
+As simple as that ;)
+
 ## Some screenshots
 
 The home:
+
 ![The home](/resources/img-home-page.png)
 
 The study cards:
+
 ![The study cards](/resources/img-study-cards.png)
 
 You finished cards:
+
 ![You finished cards](/resources/img-cards-finished.png)
 
 Give it a try on:
@@ -95,6 +117,8 @@ Give it a try on:
 - **Twitter/X**: [@wsespindola](https://twitter.com/wsespindola)
 - **Dev Community**: [dev.to/wallaceespindola](https://dev.to/wallaceespindola)
 - **DZone**: [DZone Profile](https://dzone.com/users/1254611/wallacese.html)
+- **Gravatar**: [gravatar.com/wallacese](https://gravatar.com/wallacese)
+- **Slides**: [speakerdeck.com/wallacese](https://speakerdeck.com/wallacese)
 - **Website**: [W-Tech IT Solutions](https://www.wtechitsolutions.com/)
 
 ## License
