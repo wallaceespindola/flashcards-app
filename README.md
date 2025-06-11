@@ -1,4 +1,6 @@
-# Flashcards App
+![python_flask_logo.png](resources/python_flask_logo.png)
+
+# Flash-cards App
 
 A web-based flashcards application that allows users to upload and study flashcards from CSV files.
 
@@ -111,19 +113,20 @@ Give it a try on:
 
 ## Author Information
 
-- **LinkedIn**: [linkedin.com/in/wallaceespindola](https://linkedin.com/in/wallaceespindola/)
-- **GitHub**: [github.com/wallaceespindola](https://github.com/wallaceespindola)
-- **Email**: wallace.espindola@gmail.com
-- **Twitter/X**: [@wsespindola](https://twitter.com/wsespindola)
-- **Dev Community**: [dev.to/wallaceespindola](https://dev.to/wallaceespindola)
-- **DZone**: [DZone Profile](https://dzone.com/users/1254611/wallacese.html)
-- **Gravatar**: [gravatar.com/wallacese](https://gravatar.com/wallacese)
-- **Slides**: [speakerdeck.com/wallacese](https://speakerdeck.com/wallacese)
-- **Website**: [W-Tech IT Solutions](https://www.wtechitsolutions.com/)
+- Wallace Espindola, Sr. Software Engineer / Java & Python Dev
+- **LinkedIn:** [linkedin.com/in/wallaceespindola/](https://www.linkedin.com/in/wallaceespindola/)
+- **GitHub:** [github.com/wallaceespindola](https://github.com/wallaceespindola)
+- **E-mail:** [wallace.espindola@gmail.com](mailto:wallace.espindola@gmail.com)
+- **Twitter:** [@wsespindola](https://twitter.com/wsespindola)
+- **Gravatar:** [gravatar.com/wallacese](https://gravatar.com/wallacese)
+- **Dev Community:** [dev.to/wallaceespindola](https://dev.to/wallaceespindola)
+- **DZone Articles:** [DZone Profile](https://dzone.com/users/1254611/wallacese.html)
+- **Pulse Articles:** [LinkedIn Articles](https://www.linkedin.com/in/wallaceespindola/recent-activity/articles/)
+- **Website:** [W-Tech IT Solutions](https://www.wtechitsolutions.com/)
+- **Presentation Slides:** [Speakerdeck](https://speakerdeck.com/wallacese)
 
 ## License
 
-This project is released under the Apache 2.0 License.
-See the LICENSE file for details.
-
-Copyright 2025 Wallace Espindola.
+- This project is released under the Apache 2.0 License.
+- See the [LICENSE](LICENSE) file for details.
+- Copyright © 2025 [Wallace Espindola](https://github.com/wallaceespindola/).
