@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    name: Install & Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Compile sources
+        run: python -m compileall -q app.py main.py
+
+      # ponytail: no test suite yet; this proves the app boots and serves the home page. Add pytest when tests exist.
+      - name: Home page responds
+        run: python -c "import app; assert app.app.test_client().get('/').status_code == 200"
