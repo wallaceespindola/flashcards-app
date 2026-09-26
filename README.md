@@ -2,6 +2,10 @@
 
 # Flash-cards App
 
+![Apache 2.0 License](https://img.shields.io/badge/License-Apache2.0-orange)
+![Python](https://img.shields.io/badge/Built_with-Python-blue)
+![Flask](https://img.shields.io/badge/Powered_by-Flask-green)
+
 A web-based flashcards application that allows users to upload and study flashcards from CSV files.
 
 ## Description
