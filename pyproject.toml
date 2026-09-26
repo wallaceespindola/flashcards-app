@@ -4,10 +4,11 @@ version = "1.0.0"
 description = "A web-based flashcards application that allows users to upload and study flashcards from CSV files"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
+dynamic = ["dependencies"]
 authors = [
     { name = "Wallace Espindola", email = "wallace.espindola@gmail.com" }
 ]
-license = { file = "LICENSE", text = "Apache License, Version 2.0" }
+license = { file = "LICENSE" }
 keywords = ["flashcards", "python", "flask", "web-app", "education", "study-tool"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -41,11 +42,11 @@ dev = [
     "pytest-cov>=4.0",
     "black>=23.0",
     "isort>=5.0",
-    "flake8>=6.0"
+    "ruff>=0.6"
 ]
 
 [tool.setuptools]
-packages = ["flashcards_app"]
+py-modules = ["app", "main"]
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }

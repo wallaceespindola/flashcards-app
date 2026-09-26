@@ -78,7 +78,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Start the application (Flask debug server on port 5000):
+4. Start the application on port 5000 (set `FLASK_DEBUG=1` for the debugger and auto-reload; see [`.env.example`](.env.example)):
 
 ```bash
 python app.py

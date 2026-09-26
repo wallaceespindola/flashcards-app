@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import logging
+import os
 from datetime import datetime
 
 from flask import Flask, flash, redirect, render_template, request
@@ -10,7 +11,8 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.secret_key = "your-super-secret-key-123"  # Set a secure secret key for session management
+# Signs the session cookie used by flash messages; a random per-process key is fine for local use.
+app.secret_key = os.environ.get("FLASK_SECRET_KEY") or os.urandom(32).hex()
 
 # Store flashcard sets in memory (in a real app, this would be a database)
 flashcard_sets = {}
@@ -105,4 +107,5 @@ def append_and_log(flashcards, row):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    # Debug mode enables the interactive Werkzeug debugger; opt in with FLASK_DEBUG=1.
+    app.run(debug=os.environ.get("FLASK_DEBUG") == "1", port=5000)
